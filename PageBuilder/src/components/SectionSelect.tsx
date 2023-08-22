@@ -3,6 +3,9 @@ import SectionTab from './SectionTab'
 
 interface MainProps {
   setTitle: React.Dispatch<React.SetStateAction<string>>
+  setRemove: (boolean: boolean) => void
+  setType1: (type: InputColors) => void
+  setType2: (type: InputColors) => void
 }
 
 interface sectionTabInterface {
@@ -10,7 +13,9 @@ interface sectionTabInterface {
  color: string
 }
 
-const SectionSelect: React.FC<MainProps> = ({setTitle}) => {
+type InputColors = 'color' | 'text' | 'number'
+
+const SectionSelect: React.FC<MainProps> = ({setTitle, setRemove, setType1, setType2}) => {
 
   const sectionTabs: sectionTabInterface[] = [
     { title:'Hero', color:"#6E56CF"},
@@ -20,11 +25,29 @@ const SectionSelect: React.FC<MainProps> = ({setTitle}) => {
 
    const handleTabClick = (sectTitle: string) => { 
     setTitle(sectTitle)
+    setRemove(false)
+    switch(sectTitle) {
+      case 'Hero':
+        setType1('text')
+        setType2('text')
+        break;
+      case 'Article':
+        setType1('text')
+        setType2('color')
+        break;
+      case 'Price':
+        setType1('text')
+        setType2('number')
+        break;   
+      default:
+        setType1('text')
+        setType2('text')
+    }
    }
 
   return (
     <div>
-      <p style={{textAlign: 'left', fontWeight: 'bold', paddingBottom: '10px'}}>Available Sections</p>
+      <p style={{textAlign: 'left', fontWeight: 'bold'}}>Available Sections</p>
         <ul className='main-section'>
        {
         sectionTabs.map((sect, index) => {
