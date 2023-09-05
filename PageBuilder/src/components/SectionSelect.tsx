@@ -2,10 +2,10 @@ import React from 'react'
 import SectionTab from './SectionTab'
 
 interface MainProps {
+  title: string
   setTitle: React.Dispatch<React.SetStateAction<string>>
-  setRemove: (boolean: boolean) => void
-  setType1: (type: InputColors) => void
-  setType2: (type: InputColors) => void
+  setShowMainSection: (boolean: boolean) => void
+  showMainSection: boolean
 }
 
 interface sectionTabInterface {
@@ -13,9 +13,7 @@ interface sectionTabInterface {
  color: string
 }
 
-type InputColors = 'color' | 'text' | 'number'
-
-const SectionSelect: React.FC<MainProps> = ({setTitle, setRemove, setType1, setType2}) => {
+const SectionSelect: React.FC<MainProps> = ({setTitle, setShowMainSection, showMainSection, title}) => {
 
   const sectionTabs: sectionTabInterface[] = [
     { title:'Hero', color:"#6E56CF"},
@@ -24,24 +22,10 @@ const SectionSelect: React.FC<MainProps> = ({setTitle, setRemove, setType1, setT
   ]
 
    const handleTabClick = (sectTitle: string) => { 
-    setTitle(sectTitle)
-    setRemove(false)
-    switch(sectTitle) {
-      case 'Hero':
-        setType1('text')
-        setType2('text')
-        break;
-      case 'Article':
-        setType1('text')
-        setType2('color')
-        break;
-      case 'Price':
-        setType1('text')
-        setType2('number')
-        break;   
-      default:
-        setType1('text')
-        setType2('text')
+    if(title == sectTitle){
+      setShowMainSection(!showMainSection)
+    } else {
+      setTitle(sectTitle)
     }
    }
 

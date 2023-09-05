@@ -1,39 +1,43 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import MainSection from './components/MainSection'
 import SectionSelect from './components/SectionSelect'
 
-type InputTypes = 'color' | 'text' | 'number'
 
 const App: React.FC = () => {
   const [title, setTitle] = useState('')
-  const [remove, setRemove] = useState(false)
-  const [type1, setType1] = useState<InputTypes>('text')
-  const [type2, setType2] = useState<InputTypes>('text')
-  const [firstInput, setFirstInput] = useState<number | string>()
-  const [secondInput, setSecondInput] = useState<number | string>()
+  const [showMainSection, setShowMainSection] = useState(false)
+  const [showStored, setStored] = useState(false)
 
+  useEffect(() => {
+   const storedTitle = localStorage.getItem('title')
+   if(storedTitle){
+    setTitle(storedTitle)
+   }
+   const storedShowMainSection = localStorage.getItem('showMainSection')
+   if(storedShowMainSection){
+    setStored(Boolean(showMainSection).valueOf())
+   }
+  },[])
 
+  useEffect(() => {
+    localStorage.setItem('title', title)
+    localStorage.setItem('showMainSection', showMainSection.toString())
+  },[title, showMainSection])
 
   return (
     <main>
-      {!remove && title.length > 0 ?
-        <MainSection
+       {showMainSection || showStored ? <MainSection
           title={title}
-          type1={type1}
-          type2={type2}
-          remove={remove}
-          setRemove={setRemove}
-          setFirstInput={setFirstInput}
-          setSecondInput={setSecondInput}
-          firstInput={firstInput}
-          secondInput={secondInput}
-        /> : null}
+          setShowMainSection={setShowMainSection}
+        /> : null }
+    
       <SectionSelect
+        title={title}
         setTitle={setTitle}
-        setType1={setType1}
-        setType2={setType2}
-        setRemove={setRemove} />
+        setShowMainSection={setShowMainSection}
+        showMainSection={showMainSection}
+         />
     </main>
   )
 }
